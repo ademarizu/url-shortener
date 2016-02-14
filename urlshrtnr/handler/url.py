@@ -14,6 +14,7 @@
 
 """Tornado Application RequestHandler for URL's.
 """
+import simplejson
 from tornado.web import RequestHandler
 from tornado.gen import coroutine
 from tornado.gen import Future
@@ -33,18 +34,40 @@ class URLHandler(RequestHandler):
         self.controller = controller
 
     @coroutine
-    def get(self, id):
-        url = yield self.get_url_by_id(id)
+    def get(self, urlid):
+        url = yield self.get_url_by_id(urlid)
         if url:
             self.redirect(url, status=301)
         else:
             self.set_status(404, "Not found")
 
-    def get_url_by_id(self, id, callback=None):
-        url = self.controller.get_url_by_id(id)
+    def get_url_by_id(self, urlid, callback=None):
+        url = self.controller.get_url_by_urlid(id)
+        LOG.debug("Received url (%s) from id: %s", url, urlid)
         future = Future()
         future.set_result(url)
         return future
 
-    def delete(self, id):
-        self.controller.delete_url_by_id(id)
+    def delete(self, urlid):
+        self.controller.delete_url_by_urlid(urlid)
+
+
+class URLStatsHandler(RequestHandler):
+
+    def __init__(self, application, request, **kwargs):
+        self.controller = None
+        RequestHandler.__init__(self, application, request, **kwargs)
+
+    def initialize(self, controller):
+        LOG.debug("Initialized called - %s", controller)
+        self.controller = controller
+
+    @coroutine
+    def get(self):
+        stats = yield self.get_total_stats()
+        self.write(simplejson.dumps(stats))
+
+    def get_total_stats(self, callback=None):
+        future = Future()
+        future.set_result(self.controller.get_total_stats())
+        return future
