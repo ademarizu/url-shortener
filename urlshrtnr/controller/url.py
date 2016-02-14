@@ -27,4 +27,5 @@ class URLController():
         :param id: url's id.
         :return: url if found, None otherwise
         """
+        self.url_dao.increase_url_stats_by_urlid(id)
         return self.url_dao.get_url_by_id(id)

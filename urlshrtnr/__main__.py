@@ -4,7 +4,7 @@ from urlshrtnr.application import UrlShrtnrApplication
 
 import logging
 
-logging.basicConfig()
+logging.basicConfig(level=logging.DEBUG)
 LOG = logging.getLogger(__name__)
 
 # Simple main to initialize service
