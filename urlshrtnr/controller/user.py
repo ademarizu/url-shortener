@@ -25,6 +25,18 @@ class UserController():
         userid = user_dict.get("id", None)
         self.user_dao.add_user(userid)
 
+    def add_user_url(self, userid, url_dict):
+        url = url_dict["url"]
+        urlid = self.user_dao.add_user_url(userid, url)
+
+        response = {
+            "id": userid,
+            "hits": self.user_dao.get_hits_of_url_by_urlid(urlid),
+            "url": url,
+            "shortUrl": "url/%s" %urlid
+        }
+        return response
+
     def delete_user_by_id(self, userid):
         self.user_dao.delete_user_by_id(userid)
 
