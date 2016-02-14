@@ -57,3 +57,29 @@ class UserHandler(RequestHandler):
         stats = self.controller.get_user_stats_by_id(userid)
         future.set_result(stats)
         return future
+
+class UserUrlHandler(RequestHandler):
+
+    def __init__(self, application, request, **kwargs):
+        self.controller = None
+        RequestHandler.__init__(self, application, request, **kwargs)
+
+    def initialize(self, controller):
+        LOG.debug("Initialized called - %s", controller)
+        self.controller = controller
+
+    @coroutine
+    def post(self, userid):
+        body = self.request.body
+        LOG.debug("[post] - body: %s", type(body))
+        url_dict = simplejson.loads(body)
+        result = yield self.add_user_url(userid, url_dict)
+        self.write(result)
+
+    def add_user_url(self, userid, url_dict):
+        future = Future()
+        future.set_result(self.controller.add_user_url(userid, url_dict))
+        return future
+
+
+
