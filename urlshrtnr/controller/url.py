@@ -21,11 +21,22 @@ class URLController():
     def __init__(self, url_dao):
         self.url_dao = url_dao
 
-    def get_url_by_id(self, id):
+    def get_url_by_urlid(self, id):
         """
         Retrieves an url by its id.
         :param id: url's id.
         :return: url if found, None otherwise
         """
         self.url_dao.increase_url_stats_by_urlid(id)
-        return self.url_dao.get_url_by_id(id)
+        return self.url_dao.get_url_by_urlid(id)
+
+    def get_total_stats(self):
+        """
+        Retrieves urls stats
+        :return: dict object with urls stats
+        """
+        stats = {
+            "hits": self.url_dao.get_total_of_hits(),
+            "urlCount": self.user_dao.get_urls_count(),
+            "topUrls": self.user_dao.get_user_top_urls_by_userid(userid),
+        }
