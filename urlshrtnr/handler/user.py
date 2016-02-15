@@ -90,8 +90,13 @@ class UserUrlHandler(RequestHandler):
 
     def add_user_url(self, userid, url_dict):
         future = Future()
-        future.set_result(self.controller.add_user_url(userid, url_dict))
+        result = self.controller.add_user_url(userid, url_dict)
+        future.set_result(self.format_result(result))
         return future
+	
+    def format_result(self, result):
+        result["shortUrl"] = "/".join([self.domain, result["shortUrl"]])
+	return simplejson.dumps(result)
 
 
 
