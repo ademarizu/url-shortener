@@ -8,6 +8,7 @@ This is the simplest Url Shortner I could think of. It's fully implemented using
 * redis
 
 **This version runs exclusively wiht Redis, you must have it running somewhere to use this project.**
+If you don't have redis installed, but is using a Debian/Ubuntu SO, try `sudo apt-get install redis-server`. But if you want something more recent, try this [link](http://redis.io/topics/quickstart).
 
 ## Installing
 Just download this code or git clone it `git clone https://github.com/ademarizu/url-shrtnr.git`
