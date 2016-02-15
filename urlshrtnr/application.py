@@ -4,7 +4,7 @@ from urlshrtnr.handler.url import URLHandler, URLStatsHandler
 from urlshrtnr.controller.url import URLController
 from urlshrtnr.handler.user import UserHandler, UserUrlHandler
 from urlshrtnr.controller.user import UserController
-from urlshrtnr.dao.url import RedisDao
+from urlshrtnr.dao import RedisDao
 
 from redis import StrictRedis
 import logging
