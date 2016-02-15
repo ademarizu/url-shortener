@@ -54,9 +54,12 @@ class UserController():
         self.user_dao.delete_user_by_userid(userid)
 
     def get_user_stats_by_id(self, userid):
-        stats = {
-            "hits": self.user_dao.get_user_total_hits_by_userid(userid),
-            "urlCount": self.user_dao.get_user_number_of_urls_by_userid(userid),
-            "topUrls": self.user_dao.get_user_top_urls_by_userid(userid),
-        }
+	user = self.user_dao.get_user_by_userid(userid)
+        stats = None
+	if user:
+            stats = {
+                "hits": self.user_dao.get_user_total_hits_by_userid(userid),
+                "urlCount": self.user_dao.get_user_number_of_urls_by_userid(userid),
+                "topUrls": self.user_dao.get_user_top_urls_by_userid(userid),
+            }
         return stats
