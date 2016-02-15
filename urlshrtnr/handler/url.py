@@ -66,9 +66,17 @@ class URLStatsHandler(RequestHandler):
     def get(self):
         stats = yield self.get_total_stats()
         self.add_header("Content-Type", "application/json")
-        self.write(simplejson.dumps(stats))
+        self.write(stats)
 
     def get_total_stats(self, callback=None):
         future = Future()
-        future.set_result(self.controller.get_total_stats())
+	stats = self.controller.get_total_stats()
+        future.set_result(self.format_stats(stats))
         return future
+
+    def format_stats(self, stats):
+        urls = []
+        for url in stats["topUrls"]:
+            urls.append(self.controller.get_url_by_urlid(url.split(":")[1]))
+        stats["topUrls"] = urls
+        return simplejson.dumps(stats)
