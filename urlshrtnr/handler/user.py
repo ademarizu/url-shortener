@@ -28,6 +28,7 @@ class UserHandler(RequestHandler):
 
     def __init__(self, application, request, **kwargs):
         self.controller = None
+	self.domain = application.domain
         RequestHandler.__init__(self, application, request, **kwargs)
 
     def initialize(self, controller):
@@ -45,6 +46,7 @@ class UserHandler(RequestHandler):
 
     @coroutine
     def get(self, userid):
+	LOG.debug("Olha o domain: %s", self.domain)
         stats = yield self.get_user_stats_by_id(userid)
         if stats:
             self.add_header("Content-Type", "application/json")

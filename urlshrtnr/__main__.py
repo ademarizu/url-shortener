@@ -3,7 +3,7 @@ import logging
 
 from tornado.httpserver import HTTPServer
 from tornado.ioloop import IOLoop
-from urlshrtnr.application import UrlShrtnrApplication
+from urlshrtnr.application import UrlShrtnr
 
 class UrlShrtnrApplicationCli():
 
@@ -23,7 +23,7 @@ class UrlShrtnrApplicationCli():
         self.init(values.domain, values.port, values.db_host, values.db_port, values.db_number, values.db_password)
 
     def init(self, domain, port, db_host, db_port, db_number, db_password):
-        shrtnr_app = UrlShrtnrApplication(domain, db_host, db_port, db_number, db_password)
+        shrtnr_app = UrlShrtnr(domain, db_host, db_port, db_number, db_password)
         server = HTTPServer(shrtnr_app.make_app())
         server.bind(port)
         server.start(0)  # Forks multiple sub-processes
