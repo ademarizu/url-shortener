@@ -46,7 +46,7 @@ class UserHandler(RequestHandler):
 
     @coroutine
     def get(self, userid):
-	LOG.debug("Olha o domain: %s", self.domain)
+	LOG.debug("[get] - Get called with userid (%s)")
         stats = yield self.get_user_stats_by_id(userid)
         if stats:
             self.add_header("Content-Type", "application/json")
