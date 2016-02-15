@@ -41,7 +41,7 @@ class UserHandler(RequestHandler):
         self.controller.add_user(user_dict)
 
     def delete(self, userid):
-        self.controller.delete_user_by_id(userid)
+        self.controller.delete_user_by_userid(userid)
 
     @coroutine
     def get(self, userid):

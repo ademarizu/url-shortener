@@ -14,21 +14,23 @@
 
 """Controller for url.
 """
-
+import logging
+LOG = logging.getLogger(__name__)
 
 class URLController():
 
     def __init__(self, url_dao):
         self.url_dao = url_dao
 
-    def get_url_by_urlid(self, id):
+    def get_url_by_urlid(self, urlid):
         """
         Retrieves an url by its id.
-        :param id: url's id.
+        :param urlid: url's id.
         :return: url if found, None otherwise
         """
-        self.url_dao.increase_url_stats_by_urlid(id)
-        return self.url_dao.get_url_by_urlid(id)
+        LOG.debug("[get_url_by_urlid] - Getting url by id: %s", urlid)
+        self.url_dao.increase_url_stats_by_urlid(urlid)
+        return self.url_dao.get_url_by_urlid(urlid)
 
     def get_total_stats(self):
         """
@@ -37,6 +39,10 @@ class URLController():
         """
         stats = {
             "hits": self.url_dao.get_total_of_hits(),
-            "urlCount": self.user_dao.get_urls_count(),
-            "topUrls": self.user_dao.get_user_top_urls_by_userid(userid),
+            "urlCount": self.url_dao.get_urls_count(),
+            "topUrls": self.url_dao.get_top_urls()
         }
+        return stats
+
+    def delete_url_by_urlid(self, urlid):
+        self.url_dao.delete_url_by_urlid(urlid)

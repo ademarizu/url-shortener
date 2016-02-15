@@ -125,7 +125,7 @@ class RedisDao():
         """
         #Deleting all user's urls
         for urlid in self.redis.zrevrange(self.get_user_urls_key(userid), 0, -1):
-            self.delete_url_by_urlid(urlid)
+            self.delete_url_by_urlid(urlid.split(":")[1])
 
         #Deleting user's hits
         self.redis.delete(self.get_user_total_hits_key(userid))
@@ -137,12 +137,13 @@ class RedisDao():
         self.redis.delete(self.get_user_key(userid))
 
     def delete_url_by_urlid(self, urlid):
+        LOG.debug("Deleting url %s", urlid)
         """
         Deletes all redis references of URL given its id.
         :param urlid: url's id.
         """
         #First, retrieving url's hits count and user
-        url_hits = self.get_hits_of_url_by_urlid(urlid)
+        url_hits = int(self.get_hits_of_url_by_urlid(urlid))
         url_user = self.get_userid_by_url_urlid(urlid)
 
         #Deleting url's hit count reference
@@ -161,10 +162,10 @@ class RedisDao():
         self.redis.zrem(self.get_user_urls_key(url_user), self.get_url_key(urlid))
 
         #Decreasing urls total hits
-        self.redis.zincrby(self.get_urls_total_hits_key(), -url_hits)
+        self.redis.incrby(self.get_urls_total_hits_key(), -url_hits)
 
         #Decreasing user total hits
-        self.redis.zincrby(self.get_user_total_hits_key(url_user), -url_hits)
+        self.redis.incrby(self.get_user_total_hits_key(url_user), -url_hits)
 
     def get_url_key(self, urlid):
         """

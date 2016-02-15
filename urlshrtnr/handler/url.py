@@ -42,7 +42,7 @@ class URLHandler(RequestHandler):
             self.set_status(404, "Not found")
 
     def get_url_by_id(self, urlid, callback=None):
-        url = self.controller.get_url_by_urlid(id)
+        url = self.controller.get_url_by_urlid(urlid)
         LOG.debug("Received url (%s) from id: %s", url, urlid)
         future = Future()
         future.set_result(url)
@@ -65,6 +65,7 @@ class URLStatsHandler(RequestHandler):
     @coroutine
     def get(self):
         stats = yield self.get_total_stats()
+        self.add_header("Content-Type", "application/json")
         self.write(simplejson.dumps(stats))
 
     def get_total_stats(self, callback=None):
