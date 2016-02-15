@@ -14,11 +14,12 @@ tornado.options.parse_command_line()
 
 class UrlShrtnrApplication():
 
-    def __init__(self):
-        self.redis = StrictRedis(host="192.168.59.103", port=6379, db=0, password=None)
+    def __init__(self, domain, db_host, db_port, db_number, db_password=None):
+        self.redis = StrictRedis(host=db_host, port=db_port, db=db_number, password=db_password)
         self.dao = RedisDao(self.redis)
-        self.controllers = {"url": URLController(self.dao),
-                            "user": UserController(self.dao)}
+        self.controllers = {"url": URLController(domain, self.dao),
+                            "user": UserController(domain, self.dao)}
+        self.domain = domain
 
     def make_app(self):
         LOG.info("Making app")

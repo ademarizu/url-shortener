@@ -62,6 +62,7 @@ class UserUrlHandler(RequestHandler):
 
     def __init__(self, application, request, **kwargs):
         self.controller = None
+        self.domain = application.domain
         RequestHandler.__init__(self, application, request, **kwargs)
 
     def initialize(self, controller):
