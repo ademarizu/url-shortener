@@ -15,6 +15,9 @@ __author__ = 'ademarizu'
 
 """Controller for user.
 """
+import logging
+LOG = logging.getLogger(__name__)
+
 
 class UserController():
 
@@ -36,6 +39,16 @@ class UserController():
             "shortUrl": "url/%s" %urlid
         }
         return response
+  
+    def get_url_by_urlid(self, urlid):
+        """
+        Retrieves an url by its id.
+        :param urlid: url's id.
+        :return: url if found, None otherwise
+        """
+        LOG.debug("[get_url_by_urlid] - Getting url by id: %s", urlid)
+        self.user_dao.increase_url_stats_by_urlid(urlid)
+        return self.user_dao.get_url_by_urlid(urlid)
 
     def delete_user_by_userid(self, userid):
         self.user_dao.delete_user_by_userid(userid)

@@ -50,13 +50,22 @@ class UserHandler(RequestHandler):
         stats = yield self.get_user_stats_by_id(userid)
         if stats:
             self.add_header("Content-Type", "application/json")
-            self.write(simplejson.dumps(stats))
+            self.write(stats)
         else:
             self.set_status(404, "Not found")
+  
+    def format_stats(self, stats):
+        urls = []
+        for url in stats["topUrls"]:
+            urls.append(self.controller.get_url_by_urlid(url.split(":")[1]))
+        stats["topUrls"] = urls
+        return simplejson.dumps(stats)
 
     def get_user_stats_by_id(self, userid):
         future = Future()
         stats = self.controller.get_user_stats_by_id(userid)
+        if stats:
+            stats = self.format_stats(stats)
         future.set_result(stats)
         return future
 
